@@ -30,6 +30,9 @@ const LOCALE_ALIAS_MAP: Record<string, SupportedLocale> = {
   "zh-hans": "zh-Hans",
   "zh-cn": "zh-Hans",
   "zh-sg": "zh-Hans",
+  ru: "ru",
+  "ru-ru": "ru",
+  "ru-ua": "ru",
 };
 
 const SUPPORTED_LOCALE_LOOKUP = new Map(
