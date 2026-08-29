@@ -324,3 +324,99 @@ export const searchableItems = pgTable(
     };
   },
 );
+
+// Customer wallet table for tracking credits/balance
+export const customerWallets = pgTable(
+  "customer_wallets",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    balance: numeric("balance", { precision: 12, scale: 2 }).notNull().default("0"),
+    currency: text("currency").notNull().default("usd"),
+    totalSpent: numeric("totalSpent", { precision: 12, scale: 2 }).notNull().default("0"),
+    totalEarned: numeric("totalEarned", { precision: 12, scale: 2 }).notNull().default("0"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("customer_wallets_userId_idx").on(table.userId),
+    };
+  },
+);
+
+// Usage tracking table for rate limiting and billing
+export const usageRecords = pgTable(
+  "usage_records",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    apiKeyId: uuid("apiKeyId"),
+    operationType: text("operationType").notNull(), // 'search', 'index', 'delete', etc.
+    cost: numeric("cost", { precision: 10, scale: 2 }).notNull(),
+    tokensUsed: integer("tokensUsed").notNull().default(0),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    timestamp: timestamp("timestamp").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("usage_records_userId_idx").on(table.userId),
+      apiKeyIdx: index("usage_records_apiKeyId_idx").on(table.apiKeyId),
+      timestampIdx: index("usage_records_timestamp_idx").on(table.timestamp),
+    };
+  },
+);
+
+// Rate limit configuration per user/plan
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    planId: text("planId"), // Link to tariff/plan
+    requestsPerMinute: integer("requestsPerMinute").notNull().default(100),
+    requestsPerDay: integer("requestsPerDay").notNull().default(10000),
+    monthlyTokenLimit: integer("monthlyTokenLimit").notNull().default(1000000),
+    concurrentRequests: integer("concurrentRequests").notNull().default(10),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("rate_limits_userId_idx").on(table.userId),
+      planIdx: index("rate_limits_planId_idx").on(table.planId),
+    };
+  },
+);
+
+// Customer integrations tracking (SDK usage, webhooks, etc.)
+export const customerIntegrations = pgTable(
+  "customer_integrations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    type: text("type").notNull(), // 'javascript', 'python', 'api', etc.
+    status: text("status").notNull().default("active"), // 'active', 'paused', 'failed'
+    lastUsedAt: timestamp("lastUsedAt"),
+    webhookUrl: text("webhookUrl"),
+    webhookSecret: text("webhookSecret"),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("customer_integrations_userId_idx").on(table.userId),
+      typeIdx: index("customer_integrations_type_idx").on(table.type),
+    };
+  },
+);

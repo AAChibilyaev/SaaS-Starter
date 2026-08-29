@@ -60,6 +60,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-email/components": "^1.0.8",
     "@react-email/render": "^2.0.4",
+    "@scalar/api-reference": "1.67.0",
     "@t3-oss/env-nextjs": "^0.13.10",
     "better-auth": "^1.5.4",
     "class-variance-authority": "^0.7.1",
