@@ -48,7 +48,7 @@ export class AACSearchClient {
   async getDocument(
     collection: string,
     documentId: string
-  ): Promise<Record<string, any>> {
+  ): Promise<Record<string, unknown>> {
     return this.request(
       "GET",
       `/collections/${collection}/documents/${documentId}`
@@ -65,7 +65,7 @@ export class AACSearchClient {
   /**
    * Get search history
    */
-  async getSearchHistory(params?: Record<string, any>): Promise<SearchHistory[]> {
+  async getSearchHistory(params?: Record<string, unknown>): Promise<SearchHistory[]> {
     const response = await this.request<{ searches: SearchHistory[] }>(
       "GET",
       "/search-history",
@@ -89,10 +89,10 @@ export class AACSearchClient {
   /**
    * Make HTTP request
    */
-  private async request<T = any>(
+  private async request<T = unknown>(
     method: string,
     endpoint: string,
-    data?: Record<string, any>
+    data?: unknown
   ): Promise<T> {
     const url = new URL(this.baseURL + endpoint);
 
@@ -104,8 +104,8 @@ export class AACSearchClient {
       },
     };
 
-    if (method === "GET" && data) {
-      Object.entries(data).forEach(([key, value]) => {
+    if (method === "GET" && data && typeof data === "object") {
+      Object.entries(data as Record<string, unknown>).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           url.searchParams.append(key, String(value));
         }
@@ -195,7 +195,7 @@ export interface SearchParams {
 
 export interface SearchHit {
   id: string;
-  document: Record<string, any>;
+  document: Record<string, unknown>;
   highlight?: Record<string, string[]>;
   text_match?: number;
 }

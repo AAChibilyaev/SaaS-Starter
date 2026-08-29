@@ -19,7 +19,7 @@ export interface SearchResult {
 
 export interface Document {
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface UsageSummary {
@@ -70,12 +70,12 @@ export class AACSearchClient {
     return response.collections;
   }
 
-  async getCollection(name: string): Promise<any> {
+  async getCollection(name: string): Promise<unknown> {
     const response = await this.request("GET", `/collections/${name}`);
     return response;
   }
 
-  async getDocument(collectionName: string, documentId: string): Promise<any> {
+  async getDocument(collectionName: string, documentId: string): Promise<unknown> {
     const response = await this.request(
       "GET",
       `/collections/${collectionName}/documents/${documentId}`
@@ -88,8 +88,8 @@ export class AACSearchClient {
     return response;
   }
 
-  async getSearchHistory(): Promise<any[]> {
-    const response = await this.request<{ searches: any[] }>(
+  async getSearchHistory(): Promise<unknown[]> {
+    const response = await this.request<{ searches: unknown[] }>(
       "GET",
       "/search-history"
     );
@@ -105,10 +105,10 @@ export class AACSearchClient {
     return response.suggestions;
   }
 
-  private async request<T = any>(
+  private async request<T = unknown>(
     method: string,
     endpoint: string,
-    body?: any,
+    body?: unknown,
     query?: Record<string, string>
   ): Promise<T> {
     const url = new URL(this.baseURL + endpoint);
@@ -129,7 +129,7 @@ export class AACSearchClient {
       headers,
     };
 
-    if (body) {
+    if (body && typeof body === "object") {
       options.body = JSON.stringify(body);
     }
 

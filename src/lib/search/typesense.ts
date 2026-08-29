@@ -63,9 +63,11 @@ export const typesenseProvider: SearchProvider = {
         sort_by: "_text_match:desc,createdAt:desc",
       };
 
+      // Typesense SDK requires Record<string, any> for collection types
       const results = await client.collections(COLLECTION_NAME).documents.search(
         searchParams as Parameters<
-          typeof client.collections<unknown>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          typeof client.collections<Record<string, any>>
         >[1]["documents"]["search"][0],
       );
 

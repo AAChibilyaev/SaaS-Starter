@@ -1,6 +1,6 @@
 import { ApiError, SearchRequest } from "./types";
 
-export function buildQueryString(params: Record<string, any>): string {
+export function buildQueryString(params: Record<string, unknown>): string {
   const entries = Object.entries(params)
     .filter(([, value]) => value !== null && value !== undefined)
     .map(([key, value]) => {
@@ -13,7 +13,7 @@ export function buildQueryString(params: Record<string, any>): string {
   return entries.join("&");
 }
 
-export function parseApiError(response: any): ApiError {
+export function parseApiError(response: unknown): ApiError {
   if (typeof response === "string") {
     return {
       code: "PARSE_ERROR",
@@ -22,11 +22,20 @@ export function parseApiError(response: any): ApiError {
     };
   }
 
+  if (typeof response === "object" && response !== null) {
+    const obj = response as Record<string, unknown>;
+    return {
+      code: (obj.code as string) || "UNKNOWN_ERROR",
+      message: (obj.message as string) || "An unknown error occurred",
+      status: (obj.status as number) || 500,
+      details: obj.details as Record<string, unknown> | undefined,
+    };
+  }
+
   return {
-    code: response.code || "UNKNOWN_ERROR",
-    message: response.message || "An unknown error occurred",
-    status: response.status || 500,
-    details: response.details,
+    code: "UNKNOWN_ERROR",
+    message: "An unknown error occurred",
+    status: 500,
   };
 }
 
@@ -64,7 +73,7 @@ export function calculateCost(
   return (requests * baseCostPerRequest + tokens * costPerToken) * multiplier;
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -81,7 +90,7 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -129,7 +138,7 @@ export function retryAsync<T>(
   });
 }
 
-export function isNetworkError(error: any): boolean {
+export function isNetworkError(error: unknown): boolean {
   if (error instanceof TypeError) {
     return error.message.includes("fetch") || error.message.includes("network");
   }
@@ -175,14 +184,14 @@ export function generateRequestId(): string {
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-export function parseJWT(token: string): Record<string, any> | null {
+export function parseJWT(token: string): Record<string, unknown> | null {
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
 
     const payload = parts[1];
     const decoded = Buffer.from(payload, "base64").toString("utf-8");
-    return JSON.parse(decoded);
+    return JSON.parse(decoded) as Record<string, unknown>;
   } catch {
     return null;
   }

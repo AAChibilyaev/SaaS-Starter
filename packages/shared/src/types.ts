@@ -27,7 +27,7 @@ export interface SearchResponse {
 
 export interface SearchHit {
   id: string;
-  document: Record<string, any>;
+  document: Record<string, unknown>;
   highlight?: Record<string, string[]>;
   text_match?: number;
 }
@@ -63,7 +63,7 @@ export interface ApiError {
   code: string;
   message: string;
   status: number;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface ApiResponse<T> {
@@ -91,7 +91,7 @@ export type FieldType = "string" | "int32" | "int64" | "float" | "bool" | "auto"
 
 export interface Document {
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface SearchHistory {
@@ -104,7 +104,7 @@ export interface SearchHistory {
 
 export interface WebhookPayload {
   event: WebhookEvent;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: string;
   request_id: string;
 }
@@ -145,5 +145,5 @@ export interface SortParam {
 export interface FilterParam {
   field: string;
   operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "in" | "nin";
-  value: any;
+  value: unknown;
 }
