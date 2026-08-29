@@ -1,0 +1,31 @@
+{
+  "name": "@aacsearch/react-sdk",
+  "version": "1.0.0",
+  "description": "React SDK for AACSearch - Advanced semantic search API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "search",
+    "semantic",
+    "api",
+    "react",
+    "hooks"
+  ],
+  "author": "AACSearch",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0"
+  },
+  "dependencies": {}
+}
