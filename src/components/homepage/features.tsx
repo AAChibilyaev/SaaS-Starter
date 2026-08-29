@@ -12,7 +12,6 @@ import {
   BarChart3,
   Lock,
   Webhook,
-  Shield,
 } from "lucide-react";
 
 function FeatureCard({

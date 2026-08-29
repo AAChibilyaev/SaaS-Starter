@@ -13,8 +13,6 @@ const createApiKeySchema = z.object({
   expiresAt: z.string().optional(),
 });
 
-type CreateApiKeyFormData = z.infer<typeof createApiKeySchema>;
-
 export function CreateApiKeyForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [generatedKey, setGeneratedKey] = useState<{
@@ -24,12 +22,15 @@ export function CreateApiKeyForm() {
   } | null>(null);
   const router = useRouter();
 
+  type FormData = z.infer<typeof createApiKeySchema>;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createApiKeySchema) as any,
     defaultValues: {
       name: "",
@@ -38,7 +39,7 @@ export function CreateApiKeyForm() {
     },
   });
 
-  const onSubmit = async (formData: any) => {
+  const onSubmit = async (formData: FormData) => {
     const data = formData as Record<string, unknown>;
     setIsSubmitting(true);
     try {

@@ -200,10 +200,10 @@ export default async function ExplorerPage() {
               </h3>
               <div className="space-y-2 text-sm">
                 <div className="rounded bg-white dark:bg-slate-900 px-3 py-2 text-slate-600 dark:text-slate-400">
-                  query: "example"
+                  query: &quot;example&quot;
                 </div>
                 <div className="rounded bg-white dark:bg-slate-900 px-3 py-2 text-slate-600 dark:text-slate-400">
-                  title: "test"
+                  title: &quot;test&quot;
                 </div>
               </div>
             </div>
