@@ -6,11 +6,13 @@ import {
   Home,
   KeyRound,
   LucideIcon,
+  Search,
   Settings,
   Shield,
   Upload,
   Users,
   Wallet,
+  Webhook,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/config/constants";
@@ -133,6 +135,34 @@ export function AppSidebar() {
       matchMode: "exact",
     },
     {
+      id: "explorer",
+      label: <>Search Explorer</>,
+      url: "/dashboard/explorer",
+      icon: Search,
+      matchMode: "exact",
+    },
+    {
+      id: "analytics",
+      label: <>Analytics</>,
+      url: "/dashboard/analytics",
+      icon: BarChart3,
+      matchMode: "exact",
+    },
+    {
+      id: "api-keys",
+      label: <>API Keys</>,
+      url: "/dashboard/api-keys",
+      icon: KeyRound,
+      matchMode: "exact",
+    },
+    {
+      id: "webhooks",
+      label: <>Webhooks</>,
+      url: "/dashboard/webhooks",
+      icon: Webhook,
+      matchMode: "exact",
+    },
+    {
       id: "upload",
       label: <>Upload</>,
       url: "/dashboard/upload",
@@ -144,13 +174,6 @@ export function AppSidebar() {
       label: <>Billing</>,
       url: "/dashboard/billing",
       icon: Wallet,
-      matchMode: "exact",
-    },
-    {
-      id: "developer-access",
-      label: <>Developer Access</>,
-      url: "/dashboard/developer",
-      icon: KeyRound,
       matchMode: "exact",
     },
     {

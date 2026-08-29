@@ -1,4 +1,4 @@
-export const SUPPORTED_LOCALES = ["en", "zh-Hans"] as const;
+export const SUPPORTED_LOCALES = ["en", "zh-Hans", "ru"] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 export type LocaleDisplayInfo = {
@@ -10,6 +10,7 @@ export const DEFAULT_INTL_LOCALE = "en-US" as const;
 export const INTL_LOCALE_BY_SUPPORTED_LOCALE: Record<SupportedLocale, string> = {
   en: DEFAULT_INTL_LOCALE,
   "zh-Hans": "zh-CN",
+  ru: "ru-RU",
 };
 
 export const TARGET_LOCALES = SUPPORTED_LOCALES.filter(

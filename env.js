@@ -37,6 +37,12 @@ const env = createEnv({
     CREEM_ENVIRONMENT: z.enum(["test_mode", "live_mode"]).default("test_mode"),
     CREEM_WEBHOOK_SECRET: z.string(),
 
+    // Typesense Search
+    TYPESENSE_HOST: z.string().default("localhost"),
+    TYPESENSE_PORT: z.string().default("8108"),
+    TYPESENSE_PROTOCOL: z.string().default("http"),
+    TYPESENSE_API_KEY: z.string().default("xyz"),
+
     // E2E testing
     E2E_TEST_MODE: z.enum(["true", "false"]).optional(),
     E2E_TEST_SECRET: z.string().optional(),
@@ -84,6 +90,12 @@ const env = createEnv({
     CREEM_API_KEY: process.env.CREEM_API_KEY,
     CREEM_ENVIRONMENT: process.env.CREEM_ENVIRONMENT,
     CREEM_WEBHOOK_SECRET: process.env.CREEM_WEBHOOK_SECRET,
+
+    // Typesense Search
+    TYPESENSE_HOST: process.env.TYPESENSE_HOST,
+    TYPESENSE_PORT: process.env.TYPESENSE_PORT,
+    TYPESENSE_PROTOCOL: process.env.TYPESENSE_PROTOCOL,
+    TYPESENSE_API_KEY: process.env.TYPESENSE_API_KEY,
 
     // E2E testing
     E2E_TEST_MODE: process.env.E2E_TEST_MODE,

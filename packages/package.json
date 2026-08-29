@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "workspaces": [
+    "shared",
+    "react-sdk",
+    "js-sdk",
+    "php-sdk"
+  ]
+}

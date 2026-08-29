@@ -7,6 +7,8 @@ import {
   uuid,
   index,
   pgEnum,
+  numeric,
+  jsonb,
 } from "drizzle-orm/pg-core";
 
 // 定义用户角色枚举
@@ -262,6 +264,159 @@ export const uploads = pgTable(
     return {
       userIdx: index("uploads_userId_idx").on(table.userId),
       fileKeyIdx: index("uploads_fileKey_idx").on(table.fileKey),
+    };
+  },
+);
+
+// Tariffs table to store pricing tiers
+export const tariffs = pgTable(
+  "tariffs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    description: text("description"),
+    priceMonthly: numeric("priceMonthly", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    priceYearly: numeric("priceYearly", {
+      precision: 10,
+      scale: 2,
+    }),
+    features: jsonb("features").$type<string[]>().notNull().default([]),
+    isActive: boolean("isActive").notNull().default(true),
+    displayOrder: integer("displayOrder").notNull().default(0),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      slugIdx: index("tariffs_slug_idx").on(table.slug),
+      isActiveIdx: index("tariffs_isActive_idx").on(table.isActive),
+      displayOrderIdx: index("tariffs_displayOrder_idx").on(table.displayOrder),
+    };
+  },
+);
+
+// Searchable items table for indexing content
+export const searchableItems = pgTable(
+  "searchable_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    type: text("type").notNull(), // 'user', 'plan', 'documentation', etc.
+    title: text("title").notNull(),
+    description: text("description"),
+    content: text("content"), // Full content for indexing
+    tags: jsonb("tags").$type<string[]>().notNull().default([]),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    isIndexed: boolean("isIndexed").notNull().default(false),
+    externalId: text("externalId"), // Reference to original object
+    searchableText: text("searchableText"), // Denormalized text for full-text search
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      typeIdx: index("searchable_items_type_idx").on(table.type),
+      isIndexedIdx: index("searchable_items_isIndexed_idx").on(table.isIndexed),
+      externalIdIdx: index("searchable_items_externalId_idx").on(table.externalId),
+    };
+  },
+);
+
+// Customer wallet table for tracking credits/balance
+export const customerWallets = pgTable(
+  "customer_wallets",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    balance: numeric("balance", { precision: 12, scale: 2 }).notNull().default("0"),
+    currency: text("currency").notNull().default("usd"),
+    totalSpent: numeric("totalSpent", { precision: 12, scale: 2 }).notNull().default("0"),
+    totalEarned: numeric("totalEarned", { precision: 12, scale: 2 }).notNull().default("0"),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("customer_wallets_userId_idx").on(table.userId),
+    };
+  },
+);
+
+// Usage tracking table for rate limiting and billing
+export const usageRecords = pgTable(
+  "usage_records",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    apiKeyId: uuid("apiKeyId"),
+    operationType: text("operationType").notNull(), // 'search', 'index', 'delete', etc.
+    cost: numeric("cost", { precision: 10, scale: 2 }).notNull(),
+    tokensUsed: integer("tokensUsed").notNull().default(0),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    timestamp: timestamp("timestamp").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("usage_records_userId_idx").on(table.userId),
+      apiKeyIdx: index("usage_records_apiKeyId_idx").on(table.apiKeyId),
+      timestampIdx: index("usage_records_timestamp_idx").on(table.timestamp),
+    };
+  },
+);
+
+// Rate limit configuration per user/plan
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    planId: text("planId"), // Link to tariff/plan
+    requestsPerMinute: integer("requestsPerMinute").notNull().default(100),
+    requestsPerDay: integer("requestsPerDay").notNull().default(10000),
+    monthlyTokenLimit: integer("monthlyTokenLimit").notNull().default(1000000),
+    concurrentRequests: integer("concurrentRequests").notNull().default(10),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("rate_limits_userId_idx").on(table.userId),
+      planIdx: index("rate_limits_planId_idx").on(table.planId),
+    };
+  },
+);
+
+// Customer integrations tracking (SDK usage, webhooks, etc.)
+export const customerIntegrations = pgTable(
+  "customer_integrations",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    type: text("type").notNull(), // 'javascript', 'python', 'api', etc.
+    status: text("status").notNull().default("active"), // 'active', 'paused', 'failed'
+    lastUsedAt: timestamp("lastUsedAt"),
+    webhookUrl: text("webhookUrl"),
+    webhookSecret: text("webhookSecret"),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      userIdx: index("customer_integrations_userId_idx").on(table.userId),
+      typeIdx: index("customer_integrations_type_idx").on(table.type),
     };
   },
 );

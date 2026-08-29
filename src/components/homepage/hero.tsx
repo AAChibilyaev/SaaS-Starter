@@ -9,12 +9,12 @@ import Link from "next/link";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { ShellContainer } from "@/components/layout/page-container";
 
-const UI_STACK_LABEL = "Next.js 16 + shadcn/ui";
+const UI_STACK_LABEL = "Powered by Next.js + Tailwind CSS";
 
 export function Hero() {
   const [copied, setCopied] = useState(false);
   const mounted = useHydrated();
-  const command = "git clone https://github.com/UllrAI/SaaS-Starter.git";
+  const command = "npx create-aacsearch-app";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(command);
@@ -23,7 +23,7 @@ export function Hero() {
   };
 
   return (
-    <section className="bg-background border-border relative overflow-hidden border-b pt-24 pb-32 lg:pt-32 lg:pb-48">
+    <section className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 border-slate-200 dark:border-slate-800 relative overflow-hidden border-b pt-24 pb-32 lg:pt-32 lg:pb-48">
       <ShellContainer className="relative z-10">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left Side: Content */}
@@ -34,35 +34,35 @@ export function Hero() {
             >
               <Badge
                 variant="outline"
-                className="border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 mb-4 inline-flex cursor-default items-center gap-2 border px-4 py-2 font-mono text-sm font-bold transition-colors"
+                className="border-indigo-300 bg-indigo-50 text-indigo-700 dark:border-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 mb-4 inline-flex cursor-default items-center gap-2 border px-4 py-2 font-mono text-sm font-bold transition-colors"
               >
                 <span className="relative flex h-2 w-2">
-                  <span className="bg-primary absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
-                  <span className="bg-primary relative inline-flex h-2 w-2 rounded-full"></span>
+                  <span className="bg-indigo-600 absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"></span>
+                  <span className="bg-indigo-600 relative inline-flex h-2 w-2 rounded-full"></span>
                 </span>
-                <>Open source and agent ready</>
+                <>Fast semantic search for developers</>
               </Badge>
             </div>
 
             {/* Massive Headline */}
             <h1
-              className={`text-foreground mb-6 transform text-5xl leading-[0.9] font-black tracking-tighter transition-all delay-100 duration-1000 sm:text-6xl lg:text-7xl xl:text-8xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+              className={`text-slate-900 dark:text-white mb-6 transform text-5xl leading-[0.9] font-black tracking-tighter transition-all delay-100 duration-1000 sm:text-6xl lg:text-7xl xl:text-8xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
             >
-              <span className="block">SHIP YOUR</span>
-              <span className="from-foreground to-foreground/50 block bg-gradient-to-b bg-clip-text pr-1 text-transparent">
-                MICRO SaaS
+              <span className="block">SEARCH</span>
+              <span className="from-indigo-600 to-indigo-400 block bg-gradient-to-r bg-clip-text pr-1 text-transparent dark:from-indigo-400 dark:to-indigo-300">
+                YOUR DATA
               </span>
             </h1>
 
             {/* Subtext */}
             <p
-              className={`text-muted-foreground mb-10 max-w-xl transform text-lg leading-relaxed transition-all delay-200 duration-1000 sm:text-xl lg:text-2xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+              className={`text-slate-600 dark:text-slate-300 mb-10 max-w-xl transform text-lg leading-relaxed transition-all delay-200 duration-1000 sm:text-xl lg:text-2xl ${mounted ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
             >
               <>
-                Complete UllrAI SaaS starter with authentication, payments,
-                database, admin tooling, agent-ready APIs, and CLI device auth
-                for agent (OpenClaw, Codex, Claude Code, etc.) workflows.
-                Everything you need to go from idea to revenue.
+                AACSearch provides semantic search capabilities with a complete
+                SaaS platform. Built with modern authentication, payments,
+                analytics, webhooks, and rate limiting. Perfect for developers
+                who need powerful search without the infrastructure headaches.
               </>
             </p>
 
@@ -72,11 +72,11 @@ export function Hero() {
             >
               <Button
                 size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 text-base font-bold shadow-md transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-lg active:translate-x-[8px] active:translate-y-[8px] lg:h-16 lg:px-12 lg:text-lg"
+                className="bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 h-14 px-10 text-base font-bold shadow-lg transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-xl active:translate-x-[8px] active:translate-y-[8px] lg:h-16 lg:px-12 lg:text-lg"
                 asChild
               >
                 <Link href="/signup">
-                  <>START NOW</>
+                  <>Get Started Free</>
                   <Terminal className="ml-3 h-5 w-5" />
                 </Link>
               </Button>
@@ -84,12 +84,12 @@ export function Hero() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-background hover:bg-secondary h-14 border-2 px-10 text-base font-bold transition-colors lg:h-16 lg:px-12 lg:text-lg"
+                className="border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800 h-14 border-2 px-10 text-base font-bold transition-colors lg:h-16 lg:px-12 lg:text-lg"
                 asChild
               >
                 <Link href={GITHUB_URL} target="_blank">
                   <Github className="mr-2 h-5 w-5" />
-                  <>VIEW SOURCE</>
+                  <>View on GitHub</>
                 </Link>
               </Button>
             </div>
@@ -100,22 +100,22 @@ export function Hero() {
             className={`perspective-container relative w-full transform transition-all delay-500 duration-1000 ${mounted ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
           >
             {/* Main Window Interface */}
-            <div className="border-foreground bg-card interface-3d group relative border-2 shadow-[24px_24px_0px_0px_var(--primary)]">
+            <div className="border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 interface-3d group relative border-2 shadow-[24px_24px_0px_0px_rgb(99,102,241)]">
               {/* Window Header */}
-              <div className="border-foreground bg-secondary flex items-center justify-between border-b-2 px-6 py-4">
+              <div className="border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 flex items-center justify-between border-b-2 px-6 py-4">
                 <div className="flex items-center gap-3">
                   <div className="flex gap-2">
-                    <div className="bg-foreground h-3 w-3" />
-                    <div className="bg-foreground/50 h-3 w-3" />
-                    <div className="bg-foreground/25 h-3 w-3" />
+                    <div className="bg-indigo-500 h-3 w-3 rounded-full" />
+                    <div className="bg-indigo-400 h-3 w-3 rounded-full opacity-60" />
+                    <div className="bg-indigo-300 h-3 w-3 rounded-full opacity-30" />
                   </div>
-                  <div className="bg-foreground/20 mx-2 h-6 w-px" />
-                  <span className="text-foreground flex items-center gap-2 font-mono text-sm font-bold">
+                  <div className="bg-slate-300 dark:bg-slate-700 mx-2 h-6 w-px" />
+                  <span className="text-slate-700 dark:text-slate-300 flex items-center gap-2 font-mono text-sm font-bold">
                     <Terminal className="h-4 w-4" />
-                    developer-console
+                    aacsearch-cli
                   </span>
                 </div>
-                <div className="text-muted-foreground hidden font-mono text-xs font-bold sm:block">
+                <div className="text-slate-500 dark:text-slate-400 hidden font-mono text-xs font-bold sm:block">
                   user@saas-starter:~/projects/my-app
                 </div>
               </div>

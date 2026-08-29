@@ -1,0 +1,47 @@
+{
+  "name": "@aacsearch/sdk",
+  "version": "1.0.0",
+  "description": "JavaScript/TypeScript SDK for AACSearch - Advanced Semantic Search API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "search",
+    "semantic",
+    "api",
+    "javascript",
+    "typescript",
+    "sdk"
+  ],
+  "author": "AACSearch",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "tsup": "^7.0.0",
+    "vitest": "^0.34.0",
+    "eslint": "^8.0.0"
+  },
+  "peerDependencies": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "node-fetch": "^3.0.0"
+  }
+}
