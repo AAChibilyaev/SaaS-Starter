@@ -7,6 +7,8 @@ import {
   uuid,
   index,
   pgEnum,
+  numeric,
+  jsonb,
 } from "drizzle-orm/pg-core";
 
 // 定义用户角色枚举
@@ -262,6 +264,63 @@ export const uploads = pgTable(
     return {
       userIdx: index("uploads_userId_idx").on(table.userId),
       fileKeyIdx: index("uploads_fileKey_idx").on(table.fileKey),
+    };
+  },
+);
+
+// Tariffs table to store pricing tiers
+export const tariffs = pgTable(
+  "tariffs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    description: text("description"),
+    priceMonthly: numeric("priceMonthly", {
+      precision: 10,
+      scale: 2,
+    }).notNull(),
+    priceYearly: numeric("priceYearly", {
+      precision: 10,
+      scale: 2,
+    }),
+    features: jsonb("features").$type<string[]>().notNull().default([]),
+    isActive: boolean("isActive").notNull().default(true),
+    displayOrder: integer("displayOrder").notNull().default(0),
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      slugIdx: index("tariffs_slug_idx").on(table.slug),
+      isActiveIdx: index("tariffs_isActive_idx").on(table.isActive),
+      displayOrderIdx: index("tariffs_displayOrder_idx").on(table.displayOrder),
+    };
+  },
+);
+
+// Searchable items table for indexing content
+export const searchableItems = pgTable(
+  "searchable_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    type: text("type").notNull(), // 'user', 'plan', 'documentation', etc.
+    title: text("title").notNull(),
+    description: text("description"),
+    content: text("content"), // Full content for indexing
+    tags: jsonb("tags").$type<string[]>().notNull().default([]),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    isIndexed: boolean("isIndexed").notNull().default(false),
+    externalId: text("externalId"), // Reference to original object
+    searchableText: text("searchableText"), // Denormalized text for full-text search
+    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+  },
+  (table) => {
+    return {
+      typeIdx: index("searchable_items_type_idx").on(table.type),
+      isIndexedIdx: index("searchable_items_isIndexed_idx").on(table.isIndexed),
+      externalIdIdx: index("searchable_items_externalId_idx").on(table.externalId),
     };
   },
 );
