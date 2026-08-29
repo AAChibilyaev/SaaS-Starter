@@ -14,20 +14,20 @@ export async function generateMetadata() {
 
   return {
     ...metadata,
-    title: "Micro SaaS Starter",
+    title: "AACSearch - Semantic Search API",
     description:
-      "Authentication, billing, agent-ready APIs, CLI device auth, uploads, admin tooling, and Playwright-backed smoke coverage for shipping a SaaS product faster.",
+      "Fast, semantic search API with complete SaaS infrastructure. Built-in authentication, payments, analytics, webhooks, and rate limiting. Production-ready from day one.",
     openGraph: {
       ...metadata.openGraph,
-      title: "Micro SaaS Starter",
+      title: "AACSearch - Semantic Search API",
       description:
-        "Authentication, billing, agent-ready APIs, CLI device auth, uploads, admin tooling, and Playwright-backed smoke coverage for shipping a SaaS product faster.",
+        "Fast, semantic search API with complete SaaS infrastructure. Built-in authentication, payments, analytics, webhooks, and rate limiting. Production-ready from day one.",
     },
     twitter: {
       ...metadata.twitter,
-      title: "Micro SaaS Starter",
+      title: "AACSearch - Semantic Search API",
       description:
-        "Authentication, billing, agent-ready APIs, CLI device auth, uploads, admin tooling, and Playwright-backed smoke coverage for shipping a SaaS product faster.",
+        "Fast, semantic search API with complete SaaS infrastructure. Built-in authentication, payments, analytics, webhooks, and rate limiting. Production-ready from day one.",
     },
   };
 }
