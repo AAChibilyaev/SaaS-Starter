@@ -3,7 +3,6 @@ import {
   customerWallets,
   usageRecords,
   rateLimits,
-  users,
 } from "@/database/schema";
 import { eq, and, gte } from "drizzle-orm";
 
